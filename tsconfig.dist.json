@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": false,
+    "declaration": true,
+    "removeComments": true,
+    "target": "es2015"
+  },
+  "exclude": [
+    "test/**/*",
+    "**/*.spec.ts"
+  ]
+}

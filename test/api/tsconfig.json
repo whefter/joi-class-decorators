@@ -1,0 +1,24 @@
+{
+  "extends": "../../node_modules/@elunic/ecs-tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "esnext"
+    ],
+    "target": "es2015",
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": "./",
+    "paths": {
+      "joi-class-decorators": [
+        "../../src/"
+      ],
+      "joi-class-decorators/*": [
+        "../../src/*"
+      ],
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}

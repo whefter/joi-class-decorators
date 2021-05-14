@@ -1,0 +1,73 @@
+{
+  "name": "joi-class-decorators",
+  "version": "1.0.1",
+  "description": "Integrate your Joi validation schema definitions directly into your type/DTO classes with convenient decorators.",
+  "scripts": {
+    "test:unit": "NODE_ENV=testing jest -c .jest-unit.json --watchAll",
+    "test:unit:debug": "NODE_ENV=testing node --inspect-brk=0.0.0.0:9229 -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest -c .jest-unit.json --runInBand",
+    "test:unit:once": "NODE_ENV=testing jest -c .jest-unit.json",
+    "test:api": "NODE_ENV=testing jest -c .jest-api.json --watchAll",
+    "test:api:debug": "NODE_ENV=testing node --inspect-brk=0.0.0.0:9229 -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest -c .jest-api.json --runInBand",
+    "test:api:once": "NODE_ENV=testing jest -c .jest-api.json",
+    "posttest:once": "npm run check",
+    "clean": "rm -rf dist/",
+    "compile": "npm run clean && echo Compiling... && tsc -p .",
+    "compile:dist": "npm run clean && echo Compiling... && tsc -p tsconfig.dist.json",
+    "check": "eslint -c .eslintrc.fix.json '{src,test}/**/*.{ts,js}'",
+    "fix": "eslint -c .eslintrc.fix.json --fix '{src,test}/**/*.{ts,js}'",
+    "precommit": "lint-staged"
+  },
+  "keywords": [
+    "joi"
+  ],
+  "author": "William Hefter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whefter/joi-class-decorators"
+  },
+  "main": "index.js",
+  "types": "index.d.ts",
+  "typings": "index.d.ts",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@elunic/ecs-prettier": "^0.2.1",
+    "@elunic/ecs-tsconfig": "^0.1.1",
+    "@elunic/eslint-config-ecs": "^0.1.10",
+    "@types/eslint": "^7.2.6",
+    "@types/jest": "^26.0.14",
+    "@types/lodash": "^4.14.161",
+    "@types/node": "^14.11.2",
+    "@types/prettier": "^2.1.1",
+    "@types/source-map-support": "^0.5.3",
+    "eslint": "^7.19.0",
+    "husky": "^4.3.0",
+    "jest": "^26.4.2",
+    "jest-junit": "^10.0.0",
+    "joi": "^17.2.1",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.1.2",
+    "reflect-metadata": "^0.1.13",
+    "source-map-support": "^0.5.19",
+    "ts-jest": "^26.4.1",
+    "ts-loader": "^8.0.4",
+    "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "type-fest": "^1.0.1",
+    "typescript": "~4.0.3"
+  },
+  "peerDependencies": {
+    "joi": "^17.2.1",
+    "reflect-metadata": "^0.1.13"
+  },
+  "engines": {
+    "node": ">= 10.13.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
