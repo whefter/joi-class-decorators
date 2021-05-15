@@ -1,0 +1,34 @@
+name: test
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - '**'
+      # Version tags have their own workflow
+      - '!v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '10', '12', '14', '16' ]
+    name: test on node ${{ matrix.node }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install
+      - name: Unit tests
+        run: npm run test:unit:once
+      - name: API tests
+        run: npm run test:api:once
+      - name: Coveralls (unit tests)
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
