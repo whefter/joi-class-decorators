@@ -12,6 +12,8 @@ Integrate your Joi validation schema definitions directly into your type/DTO cla
   - [Peer dependencies](#peer-dependencies)
 - [Usage](#usage)
 - [Reference](#reference)
+  - [Validation groups](#validation-groups)
+    - [Built-in group: `DEFAULT`](#built-in-group-default)
   - [`getClassSchema(typeClass, opts?: { group? })` (alias: `getTypeSchema()`)](#getclassschematypeclass-opts--group--alias-gettypeschema)
   - [`@JoiSchema()` property decorator](#joischema-property-decorator)
     - [`@JoiSchema(joiSchema)`](#joischemajoischema)
@@ -24,7 +26,6 @@ Integrate your Joi validation schema definitions directly into your type/DTO cla
     - [`@JoiSchemaOptions(Joi.Options)`](#joischemaoptionsjoioptions)
     - [`@JoiSchemaOptions(groups[], Joi.options)`](#joischemaoptionsgroups-joioptions)
   - [`@JoiSchemaExtends(type)` class decorator](#joischemaextendstype-class-decorator)
-  - [Validation groups](#validation-groups)
   - [Class inheritance](#class-inheritance)
 
 # Installation
@@ -85,6 +86,38 @@ Joi.assert(
 ```
 
 # Reference
+
+## Validation groups
+
+Groups can be used to annotate a property (`@JoiSchema`) or class (`@JoiSchemaOptions`) with different schemas/options for different use cases without having to define a new type.
+
+A straightforward use case for this is a type/DTO that behaves slightly differently when creating or updating a ressource. Have a look at the example in the [Usage](#usage) section.
+
+### Built-in group: `DEFAULT`
+
+The `DEFAULT` symbol is the default "group" assigned under the hood to any schema defined on a property, or any options defined on a class, if a group is not explicitely specified.
+
+In the following example, both declarations have the same effect:
+
+```typescript
+import { DEFAULT } from 'joi-class-decorators';
+
+@JoiSchemaOptions({
+  allowUnknown: false,
+})
+class ImplicitDefaultGroupDto {
+  @JoiSchema(Joi.string().required())
+  name!: string;
+}
+
+@JoiSchemaOptions([DEFAULT], {
+  allowUnknown: false,
+})
+class ExplicitDefaultGroupDto {
+  @JoiSchema([DEFAULT], Joi.string().required())
+  name!: string;
+}
+```
 
 ## `getClassSchema(typeClass, opts?: { group? })` (alias: `getTypeSchema()`)
 
@@ -338,12 +371,6 @@ export class CreateBookInput extends OmitType(Book, ['id'], InputType) {
   @Field()
   extraArg?: string;
 ```
-
-## Validation groups
-
-Groups can be used to annotate a property (`@JoiSchema`) or class (`@JoiSchemaOptions`) with different schemas/options for different use cases without having to define a new type.
-
-A straightforward use case for this is a type/DTO that behaves slightly differently when creating or updating a ressource.
 
 ## Class inheritance
 
