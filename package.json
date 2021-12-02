@@ -1,6 +1,6 @@
 {
   "name": "joi-class-decorators",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Integrate your Joi validation schema definitions directly into your type/DTO classes with convenient decorators.",
   "scripts": {
     "test:unit": "NODE_ENV=testing jest -c .jest-unit.json --watchAll",
