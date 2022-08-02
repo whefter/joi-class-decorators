@@ -10,7 +10,10 @@ export interface Constructor<T = any> extends Function {
 }
 
 export const OPTIONS_PROTO_KEY = Symbol('JOI_CLASSDECORATORS_OPTIONS_PROTO_KEY');
+export const CUSTOMIZER_PROTO_KEY = Symbol('JOI_CLASSDECORATORS_OPTIONS_PROTO_KEY');
+export type ObjectSchemaCustomizerFn = (schema: Joi.ObjectSchema) => Joi.ObjectSchema;
 export type ClassOptionsMetadata = Map<string | symbol, Joi.ValidationOptions>;
+export type ClassCustomizerMetadata = Map<string | symbol, ObjectSchemaCustomizerFn>;
 
 export const SCHEMA_PROTO_KEY = Symbol('JOI_CLASSDECORATORS_SCHEMA_PROTO_KEY');
 export const SCHEMA_PROP_KEY = Symbol('JOI_CLASSDECORATORS_SCHEMA_PROP_KEY');

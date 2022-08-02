@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 
 import * as Joi from 'joi';
-import { isObject } from 'lodash';
 
 import { ClassOptionsMetadata, DEFAULT, JoiValidationGroup, OPTIONS_PROTO_KEY } from './defs';
+import { argIsJoiValidationGroups, argIsJoiValidationOptions } from './helpers';
 
 export function JoiSchemaOptions(options: Joi.ValidationOptions): ClassDecorator;
 export function JoiSchemaOptions(
@@ -13,16 +13,12 @@ export function JoiSchemaOptions(
 export function JoiSchemaOptions(...args: unknown[]): ClassDecorator {
   let options: Joi.ValidationOptions;
   let groups: JoiValidationGroup[] = [];
-  if (args.length === 1 && isObject(args[0])) {
-    options = args[0] as Joi.ValidationOptions;
-  } else if (
-    args.length === 2 &&
-    args[0] instanceof Array &&
-    !args[0].some(x => !['string', 'symbol'].includes(typeof x)) &&
-    isObject(args[1])
-  ) {
-    groups = args[0] as JoiValidationGroup[];
-    options = args[1] as Joi.ValidationOptions;
+
+  if (argIsJoiValidationOptions(args[0])) {
+    options = args[0];
+  } else if (argIsJoiValidationGroups(args[0]) && argIsJoiValidationOptions(args[1])) {
+    groups = args[0];
+    options = args[1];
   } else {
     throw new Error('Invalid arguments.');
   }

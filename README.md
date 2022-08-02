@@ -26,6 +26,9 @@ Integrate your Joi validation schema definitions directly into your type/DTO cla
     - [`@JoiSchemaOptions(Joi.Options)`](#joischemaoptionsjoioptions)
     - [`@JoiSchemaOptions(groups[], Joi.options)`](#joischemaoptionsgroups-joioptions)
   - [`@JoiSchemaExtends(type)` class decorator](#joischemaextendstype-class-decorator)
+  - [`@JoiSchemaCustomization()` class decorator](#joischemacustomization-class-decorator)
+    - [`@JoiSchemaCustomization(customizeSchemaCallback)`](#joischemacustomizationcustomizeschemacallback)
+    - [`@JoiSchemaCustomization(groups[], customizeSchemaCallback)`](#joischemacustomizationgroups-customizeschemacallback)
   - [Class inheritance](#class-inheritance)
 
 # Installation
@@ -205,7 +208,7 @@ Assign the full schema constructed from the passed `nestedType` to the decorated
 
 The nested schema is constructed using the same method as other schemas, e.g. non-decorated properties are not used in constructing the schema.
 
-If the optional `customizeSchemaCallback` is provided, it will be called with the constructed schema to allow customization, e.g. ´.options()´, `.required()` and so on.
+If the optional `customizeSchemaCallback` is provided, it will be called with the constructed schema to allow customization, e.g. `.options()`, `.required()` and so on.
 
 **Example**
 
@@ -235,9 +238,9 @@ Assign a `Joi.array()`, with the full schema constructed from the passed `nested
 
 The nested schema is constructed using the same method as other schemas, e.g. non-decorated properties are not used in constructing the schema.
 
-If `customizeArraySchemaCallback` is provided, it will be called with the constructed _outer_ schema - the `.array()` schema - to allow customization, e.g. ´.options()´, `.required()` and so on.
+If `customizeArraySchemaCallback` is provided, it will be called with the constructed _outer_ schema - the `.array()` schema - to allow customization, e.g. `.options()`, `.required()` and so on.
 
-If `customizeSchemaCallback` is provided, it will be called with the constructed _inner_ schema - the one passed to `.item()` - to allow customization, e.g. ´.options()´, `.required()` and so on.
+If `customizeSchemaCallback` is provided, it will be called with the constructed _inner_ schema - the one passed to `.item()` - to allow customization, e.g. `.options()`, `.required()` and so on.
 
 **Example**
 
@@ -370,6 +373,51 @@ export class CreateBookInput extends OmitType(Book, ['id'], InputType) {
   @JoiSchema(Joi.string())
   @Field()
   extraArg?: string;
+```
+
+## `@JoiSchemaCustomization()` class decorator
+
+This decorator takes a customization function which is called with the full and final constructed class (type) schema and uses the return value (which should be a schema) in subsequent steps.
+
+This covers cases such as:
+
+```typescript
+@JoiSchemaCustomization(schema => schema.or('label', 'description'))
+class BookDto {
+  @JoiSchema(Joi.string().required())
+  label!: string;
+
+  @JoiSchema(Joi.string().required())
+  description!: string;
+}
+```
+
+Notes
+
+- This theoretically allows for a complete replacement of the schema. Your customization function could simply return a new schema such as `Joi.string('hello')`, though it is unclear what the applications of this are (perhaps conditional cases, though this is covered in part by groups and Joi's built-in conditionals)
+- For extending types, callbacks are called for a parent before a child type.
+
+### `@JoiSchemaCustomization(customizeSchemaCallback)`
+
+Assign the passed customization callback to the decorated class for the `DEFAULT` group.
+
+**Example**: see example above
+
+### `@JoiSchemaCustomization(groups[], customizeSchemaCallback)`
+
+Assign the passed customization callback to the decorated class for the passed group(s).
+
+**Example**
+
+```typescript
+@JoiSchemaCustomization(['CREATE'], schema => schema.or('label', 'description'))
+class BookDto {
+  @JoiSchema(Joi.string().required())
+  label!: string;
+
+  @JoiSchema(Joi.string().required())
+  description!: string;
+}
 ```
 
 ## Class inheritance

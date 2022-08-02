@@ -1,6 +1,13 @@
 import * as Joi from 'joi';
 
-import { DEFAULT, getTypeSchema, JoiSchema, JoiSchemaExtends, JoiSchemaOptions } from '../src';
+import {
+  DEFAULT,
+  getTypeSchema,
+  JoiSchema,
+  JoiSchemaCustomization,
+  JoiSchemaExtends,
+  JoiSchemaOptions,
+} from '../src';
 
 export class EmptyType {}
 
@@ -130,3 +137,14 @@ export class BasicTypeWithNoDefaultOptions {
   @JoiSchema(['group1'], Joi.string().valid('basicwithnodefaultoptions_prop2_group1').required())
   prop2!: unknown;
 }
+
+@JoiSchemaCustomization(schema => schema.meta({ group: 'default' }))
+@JoiSchemaCustomization(['group1'], schema => schema.meta({ group: 'group1' }))
+export class BasicTypeWithCustomization {
+  @JoiSchema(Joi.string().valid('basicwithcustomization_prop').required())
+  prop!: unknown;
+}
+
+@JoiSchemaCustomization(schema => schema.meta({ extended: true }))
+@JoiSchemaCustomization(['group1'], schema => schema.meta({ extended: true }))
+export class ExtendedTypeWithCustomization extends BasicTypeWithCustomization {}

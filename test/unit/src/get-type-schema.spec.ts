@@ -5,12 +5,14 @@ import { getClassSchema, getTypeSchema } from '../../../src';
 import {
   AdvancedType,
   BasicType,
+  BasicTypeWithCustomization,
   BasicTypeWithNoDefaultOptions,
   BasicTypeWithOptions,
   DecoratorExtendedType,
   DecoratorExtendedTypeWithOptions,
   EmptyType,
   ExtendedType,
+  ExtendedTypeWithCustomization,
   ExtendedTypeWithOptions,
   TypeWithNestedType,
   TypeWithNestedTypeAndCustomizer,
@@ -1155,6 +1157,120 @@ for (const func of [getTypeSchema, getClassSchema]) {
             preferences: {
               abortEarly: true,
             },
+          });
+        });
+      });
+    });
+
+    describe('BasicTypeWithCustomization', () => {
+      describe('with no group', () => {
+        it('should return the matching schema', async () => {
+          const schema = func(BasicTypeWithCustomization);
+
+          expect(schema.describe()).toEqual({
+            type: 'object',
+            keys: {
+              prop: {
+                type: 'string',
+                flags: {
+                  only: true,
+                  presence: 'required',
+                },
+                allow: ['basicwithcustomization_prop'],
+              },
+            },
+            metas: [
+              {
+                group: 'default',
+              },
+            ],
+            preferences: {},
+          });
+        });
+      });
+
+      describe('with group1', () => {
+        it('should return the matching schema', async () => {
+          const schema = func(BasicTypeWithCustomization, { group: 'group1' });
+
+          expect(schema.describe()).toEqual({
+            type: 'object',
+            keys: {
+              prop: {
+                type: 'string',
+                flags: {
+                  only: true,
+                  presence: 'required',
+                },
+                allow: ['basicwithcustomization_prop'],
+              },
+            },
+            metas: [
+              {
+                group: 'group1',
+              },
+            ],
+            preferences: {},
+          });
+        });
+      });
+    });
+
+    describe('ExtendedTypeWithCustomization', () => {
+      describe('with no group', () => {
+        it('should return the matching schema', async () => {
+          const schema = func(ExtendedTypeWithCustomization);
+
+          expect(schema.describe()).toEqual({
+            type: 'object',
+            keys: {
+              prop: {
+                type: 'string',
+                flags: {
+                  only: true,
+                  presence: 'required',
+                },
+                allow: ['basicwithcustomization_prop'],
+              },
+            },
+            metas: [
+              {
+                group: 'default',
+              },
+              {
+                extended: true,
+              },
+            ],
+            preferences: {},
+          });
+        });
+      });
+
+      describe('with group1', () => {
+        it('should return the matching schema', async () => {
+          const schema = func(ExtendedTypeWithCustomization, { group: 'group1' });
+
+          expect(schema.describe()).toEqual({
+            type: 'object',
+            keys: {
+              prop: {
+                type: 'string',
+                flags: {
+                  only: true,
+                  presence: 'required',
+                },
+                allow: ['basicwithcustomization_prop'],
+              },
+            },
+            metas: [
+              {
+                group: 'group1',
+              },
+              {
+                extended: true,
+              },
+            ],
+            preferences: {},
           });
         });
       });

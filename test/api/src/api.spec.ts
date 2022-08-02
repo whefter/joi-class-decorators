@@ -12,6 +12,7 @@ describe('API', () => {
         'JoiSchema',
         'JoiSchemaExtends',
         'JoiSchemaOptions',
+        'JoiSchemaCustomization',
       ].sort(),
     );
   });
@@ -39,5 +40,9 @@ describe('API', () => {
 
   it('should export a JoiSchemaOptions decorator', async () => {
     expect(typeof API.JoiSchemaOptions).toBe('function');
+  });
+
+  it('should export a JoiSchemaCustomization decorator', async () => {
+    expect(typeof API.JoiSchemaCustomization).toBe('function');
   });
 });
