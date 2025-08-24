@@ -61,7 +61,7 @@
     "typescript": "~4.3.0"
   },
   "peerDependencies": {
-    "joi": "^17.2.1",
+    "joi": ">=17 <19",
     "reflect-metadata": "^0.1.13"
   },
   "engines": {

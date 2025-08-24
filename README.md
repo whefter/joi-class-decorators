@@ -39,9 +39,19 @@ npm install --save joi-class-decorators
 
 ## Peer dependencies
 
+This library supports Joi 17 and 18.
+
 ```bash
 npm install --save joi@^17 reflect-metadata@^0.1
+# or
+npm install --save joi@^18 reflect-metadata@^0.1
 ```
+
+Support matrix:
+
+| joi-class-decorators | Supported joi versions |
+| --- | --- |
+| 1.x | 17.x, 18.x |
 
 # Usage
 
