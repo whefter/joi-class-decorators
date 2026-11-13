@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
 import Joi = require('joi');
-import { reverse } from 'lodash';
 
 import {
   ClassCustomizerMetadata,
@@ -65,7 +64,7 @@ export function getTypeSchema(
   // Schema options are also assigned in that order.  const props: string[] = [];
   const schemas: Record<string, Joi.Schema> = {};
   const options: Joi.ValidationOptions = {};
-  for (const proto of reverse(protoChain)) {
+  for (const proto of protoChain.reverse()) {
     // Check for meta information on proto
     const optionsMeta = Reflect.getOwnMetadata(OPTIONS_PROTO_KEY, proto.constructor) as
       ClassOptionsMetadata | undefined;

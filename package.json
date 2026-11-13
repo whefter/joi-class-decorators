@@ -29,9 +29,6 @@
   "main": "index.js",
   "types": "index.d.ts",
   "typings": "index.d.ts",
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
@@ -39,7 +36,6 @@
     "@tsconfig/node22": "^22.0.7",
     "@tsconfig/strictest": "^2.0.9",
     "@types/jest": "^30.0.0",
-    "@types/lodash": "^4.17.27",
     "@types/node": "^22.20.5",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
@@ -58,11 +54,11 @@
     "typescript-eslint": "^8.72.2"
   },
   "peerDependencies": {
-    "joi": ">=17 <19",
-    "reflect-metadata": "^0.1.13"
+    "joi": "^17.13.9 || ^18.3.1",
+    "reflect-metadata": "^0.1.13 || ^0.2.0"
   },
   "engines": {
-    "node": ">= 10.13.0"
+    "node": ">= 22"
   },
   "publishConfig": {
     "access": "public"
