@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import Joi = require('joi');
 import { isArray, isFunction, isObject } from 'lodash';
 
 import { JoiValidationGroup, ObjectSchemaCustomizerFn } from './defs';
