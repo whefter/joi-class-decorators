@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
 import Joi = require('joi');
-import { intersection } from 'lodash';
 
 import {
   Constructor,
@@ -85,7 +84,7 @@ export function JoiSchema(...args: unknown[]): PropertyDecorator {
     Reflect.defineMetadata(
       SCHEMA_PROTO_KEY,
       // "unique values"
-      intersection(protoList, protoList),
+      [...new Set(protoList)],
       target,
     );
 
