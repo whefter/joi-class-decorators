@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable unused-imports/no-unused-vars-ts */
-
 import { getClassSchema, getTypeSchema } from '../../../src';
 import {
   AdvancedType,

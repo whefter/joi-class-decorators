@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import * as Joi from 'joi';
+import Joi = require('joi');
 
 import { ClassOptionsMetadata, DEFAULT, JoiValidationGroup, OPTIONS_PROTO_KEY } from './defs';
 import { argIsJoiValidationGroups, argIsJoiValidationOptions } from './helpers';
@@ -26,15 +26,17 @@ export function JoiSchemaOptions(...args: unknown[]): ClassDecorator {
   try {
     Joi.string().options(options);
   } catch (error) {
-    error.message = `Invalid Joi.ValidationOptions: ${error.message}`;
-    throw error;
+    const err = error as Error;
+    err.message = `Invalid Joi.ValidationOptions: ${err.message}`;
+    throw err;
   }
 
   return function (target: Parameters<ClassDecorator>[0]): void {
     // Get existing meta, if applicable, set options for each passed group,
     // throw if options for group already set
     const optionsMeta: ClassOptionsMetadata =
-      Reflect.getOwnMetadata(OPTIONS_PROTO_KEY, target) || new Map();
+      (Reflect.getOwnMetadata(OPTIONS_PROTO_KEY, target) as ClassOptionsMetadata | undefined) ??
+      (new Map() as ClassOptionsMetadata);
 
     const finalGroups: Array<string | symbol> = groups.length ? groups : [DEFAULT];
 

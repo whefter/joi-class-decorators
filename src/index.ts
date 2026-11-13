@@ -1,4 +1,5 @@
-export { DEFAULT, JoiValidationGroup } from './internal/defs';
+export type { JoiValidationGroup } from './internal/defs';
+export { DEFAULT } from './internal/defs';
 export { getTypeSchema as getClassSchema, getTypeSchema } from './internal/get-type-schema';
 export { JoiSchema } from './internal/joi-schema.decorator';
 export { JoiSchemaCustomization } from './internal/joi-schema-customization.decorator';

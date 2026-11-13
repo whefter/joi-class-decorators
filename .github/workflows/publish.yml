@@ -14,16 +14,17 @@ jobs:
     needs: test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           cache: npm
       - run: npm ci
       - run: npm run compile:dist
       - run: cp package.json README.md LICENSE dist/
-      - uses: JS-DevTools/npm-publish@v2
+      - uses: JS-DevTools/npm-publish@0fd2f4369c5d6bcfcde6091a7c527d810b9b5c3f # v4.1.5
         with:
           package: dist/package.json
           token: ${{ secrets.NPM_TOKEN }}
+          ignore-scripts: true
