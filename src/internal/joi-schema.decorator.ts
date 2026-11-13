@@ -1,8 +1,6 @@
-/* eslint-disable @typescript-eslint/unified-signatures */ // Unified signatures are harder to read
 import 'reflect-metadata';
 
-import * as Joi from 'joi';
-import { intersection } from 'lodash';
+import Joi = require('joi');
 
 import {
   Constructor,
@@ -80,19 +78,21 @@ export function JoiSchema(...args: unknown[]): PropertyDecorator {
       throw new Error(`Invalid target property (symbol).`);
     }
 
-    const protoList: string[] = Reflect.getOwnMetadata(SCHEMA_PROTO_KEY, target) || [];
+    const protoList =
+      (Reflect.getOwnMetadata(SCHEMA_PROTO_KEY, target) as string[] | undefined) ?? [];
     protoList.push(propertyKey);
     Reflect.defineMetadata(
       SCHEMA_PROTO_KEY,
       // "unique values"
-      intersection(protoList, protoList),
+      [...new Set(protoList)],
       target,
     );
 
     // Get existing meta, if applicable, set schema for each passed group, throw if schema for group
     // already set
     const propMeta: PropertySchemaMetadata =
-      Reflect.getOwnMetadata(SCHEMA_PROP_KEY, target, propertyKey) || new Map();
+      (Reflect.getOwnMetadata(SCHEMA_PROP_KEY, target, propertyKey) as
+        PropertySchemaMetadata | undefined) ?? (new Map() as PropertySchemaMetadata);
 
     const finalGroups: Array<string | symbol> = groups.length ? groups : [DEFAULT];
 

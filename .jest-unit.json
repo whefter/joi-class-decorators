@@ -1,30 +1,20 @@
 {
-  "moduleFileExtensions": [
-    "js",
-    "json",
-    "ts"
-  ],
+  "moduleFileExtensions": ["js", "json", "ts"],
   "testEnvironment": "node",
   "testRegex": "test/unit/.*\\.spec\\.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
+    "^.+\\.(t|j)s$": [
+      "ts-jest",
+      {
+        "tsconfig": "<rootDir>/tsconfig.json"
+      }
+    ]
   },
-  "setupFilesAfterEnv": [
-    "<rootDir>/test/unit/setup.ts"
-  ],
+  "setupFilesAfterEnv": ["<rootDir>/test/unit/setup.ts"],
   "collectCoverage": true,
   "coverageDirectory": "coverage/",
-  "coverageReporters": [
-    "text-summary",
-    "json",
-    "html",
-    "lcov"
-  ],
-  "coveragePathIgnorePatterns": [
-    "/node_modules/",
-    "src/internal/defs\\.ts",
-    "src/index\\.ts"
-  ],
+  "coverageReporters": ["text-summary", "json", "html", "lcov"],
+  "coveragePathIgnorePatterns": ["/node_modules/", "src/internal/defs\\.ts", "src/index\\.ts"],
   "coverageThreshold": {
     "global": {
       "branches": 100,

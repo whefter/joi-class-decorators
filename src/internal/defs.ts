@@ -1,13 +1,11 @@
-import * as Joi from 'joi';
+import Joi = require('joi');
 
 export type JoiValidationGroup = string | symbol;
 
 export const DEFAULT: JoiValidationGroup = Symbol('JOI_CLASSDECORATORS_DEFAULT_GROUP');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface Constructor<T = any> extends Function {
-  new (...args: unknown[]): T;
-}
+export type Constructor<T = any> = new (...args: unknown[]) => T;
 
 export const OPTIONS_PROTO_KEY = Symbol('JOI_CLASSDECORATORS_OPTIONS_PROTO_KEY');
 export const CUSTOMIZER_PROTO_KEY = Symbol('JOI_CLASSDECORATORS_OPTIONS_PROTO_KEY');
@@ -22,8 +20,8 @@ export type PropertySchemaMetadata = Map<
   string | symbol,
   {
     schemaOrType: Joi.Schema | Constructor | Constructor[];
-    schemaFn?: SchemaCustomizerFn;
-    schemaArrayFn?: SchemaCustomizerFn | null;
+    schemaFn?: SchemaCustomizerFn | undefined;
+    schemaArrayFn?: SchemaCustomizerFn | null | undefined;
   }
 >;
 
