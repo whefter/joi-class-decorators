@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable unused-imports/no-unused-vars-ts */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { JoiSchemaOptions } from '../../../src';
 

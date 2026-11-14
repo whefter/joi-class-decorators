@@ -39,12 +39,14 @@ npm install --save joi-class-decorators
 
 ## Peer dependencies
 
-This library supports Joi 17 and 18.
+Requires Node.js 22 or newer.
+
+This library supports Joi 17 and 18. The minimum versions are 17.13.9 and 18.3.1, which contain fixes for published Joi security advisories.
 
 ```bash
-npm install --save joi@^17 reflect-metadata@^0.1
+npm install --save joi@^17.13.9 reflect-metadata@^0.2
 # or
-npm install --save joi@^18 reflect-metadata@^0.1
+npm install --save joi@^18.3.1 reflect-metadata@^0.2
 ```
 
 Support matrix:

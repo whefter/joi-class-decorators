@@ -15,7 +15,8 @@ export function JoiSchemaExtends(type: Constructor): ClassDecorator {
 
   return function (target: Parameters<ClassDecorator>[0]): void {
     // Get potential existing meta, throw if already set
-    const extendsMeta: Constructor | undefined = Reflect.getOwnMetadata(EXTENDS_PROTO_KEY, target);
+    const extendsMeta = Reflect.getOwnMetadata(EXTENDS_PROTO_KEY, target) as
+      Constructor | undefined;
 
     if (extendsMeta) {
       throw new Error(`Cannot redefine parent type on ${target.constructor.name}`);

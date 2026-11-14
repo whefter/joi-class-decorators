@@ -31,7 +31,8 @@ export function JoiSchemaCustomization(...args: unknown[]): ClassDecorator {
     // Get existing meta, if applicable, set customizer for each passed group,
     // throw if already set for group
     const optionsMeta: ClassCustomizerMetadata =
-      Reflect.getOwnMetadata(CUSTOMIZER_PROTO_KEY, target) || new Map();
+      (Reflect.getOwnMetadata(CUSTOMIZER_PROTO_KEY, target) as
+        ClassCustomizerMetadata | undefined) ?? (new Map() as ClassCustomizerMetadata);
 
     const finalGroups: Array<string | symbol> = groups.length ? groups : [DEFAULT];
 

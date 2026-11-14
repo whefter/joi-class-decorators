@@ -4,18 +4,18 @@
   "description": "Integrate your Joi validation schema definitions directly into your type/DTO classes with convenient decorators.",
   "scripts": {
     "test:unit": "NODE_ENV=testing jest -c .jest-unit.json --watchAll",
-    "test:unit:debug": "NODE_ENV=testing node --inspect-brk=0.0.0.0:9229 -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest -c .jest-unit.json --runInBand",
+    "test:unit:debug": "NODE_ENV=testing node --inspect-brk=0.0.0.0:9229 node_modules/.bin/jest -c .jest-unit.json --runInBand",
     "test:unit:once": "NODE_ENV=testing jest -c .jest-unit.json",
     "test:api": "NODE_ENV=testing jest -c .jest-api.json --watchAll",
-    "test:api:debug": "NODE_ENV=testing node --inspect-brk=0.0.0.0:9229 -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest -c .jest-api.json --runInBand",
+    "test:api:debug": "NODE_ENV=testing node --inspect-brk=0.0.0.0:9229 node_modules/.bin/jest -c .jest-api.json --runInBand",
     "test:api:once": "NODE_ENV=testing jest -c .jest-api.json",
-    "posttest:once": "npm run check",
     "clean": "rm -rf dist/",
     "compile": "npm run clean && echo Compiling... && tsc -p .",
     "compile:dist": "npm run clean && echo Compiling... && tsc -p tsconfig.dist.json",
-    "check": "eslint -c .eslintrc.fix.json '{src,test}/**/*.{ts,js}'",
-    "fix": "eslint -c .eslintrc.fix.json --fix '{src,test}/**/*.{ts,js}'",
-    "precommit": "lint-staged"
+    "check": "eslint src test",
+    "fix": "eslint --fix src test",
+    "typecheck": "tsc -p . --noEmit && tsc -p test/api --noEmit && tsc -p tsconfig.dist.json --noEmit",
+    "prepare": "husky"
   },
   "keywords": [
     "joi"
@@ -29,43 +29,36 @@
   "main": "index.js",
   "types": "index.d.ts",
   "typings": "index.d.ts",
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.2",
-    "@commitlint/config-conventional": "^17.7.0",
-    "@elunic/ecs-prettier": "^0.2.1",
-    "@elunic/ecs-tsconfig": "^0.1.1",
-    "@elunic/eslint-config-ecs": "^0.1.10",
-    "@types/eslint": "^7.2.6",
-    "@types/jest": "^26.0.14",
-    "@types/lodash": "^4.14.161",
-    "@types/node": "^14.11.2",
-    "@types/prettier": "^2.1.1",
-    "@types/source-map-support": "^0.5.3",
-    "eslint": "^7.19.0",
-    "husky": "^4.3.0",
-    "jest": "^29.7.0",
-    "jest-junit": "^13.0.0",
-    "joi": "^17.2.1",
-    "lint-staged": "^11.0.0",
-    "prettier": "^2.1.2",
-    "reflect-metadata": "^0.1.13",
-    "source-map-support": "^0.5.19",
-    "ts-jest": "^29.2.5",
-    "ts-loader": "^8.0.4",
-    "ts-node": "^9.0.0",
-    "tsconfig-paths": "^3.9.0",
-    "type-fest": "^1.0.1",
-    "typescript": "~4.3.0"
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@eslint/js": "^10.0.1",
+    "@tsconfig/node22": "^22.0.7",
+    "@tsconfig/strictest": "^2.0.9",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import-x": "^4.18.1",
+    "eslint-plugin-jsdoc": "^65.4.5",
+    "eslint-plugin-prettier": "^5.5.7",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "husky": "^9.1.7",
+    "jest": "^30.5.2",
+    "joi": "^17.13.9",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.10.1",
+    "reflect-metadata": "^0.2.2",
+    "ts-jest": "^29.4.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.2"
   },
   "peerDependencies": {
-    "joi": ">=17 <19",
-    "reflect-metadata": "^0.1.13"
+    "joi": "^17.13.9 || ^18.3.1",
+    "reflect-metadata": "^0.1.13 || ^0.2.0"
   },
   "engines": {
-    "node": ">= 10.13.0"
+    "node": ">= 22"
   },
   "publishConfig": {
     "access": "public"

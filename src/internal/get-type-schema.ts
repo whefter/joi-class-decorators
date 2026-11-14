@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
-import * as Joi from 'joi';
-import { reverse } from 'lodash';
+import Joi = require('joi');
 
 import {
   ClassCustomizerMetadata,
@@ -37,25 +36,23 @@ import {
 export function getTypeSchema(
   type: Constructor,
   /* istanbul ignore next */
-  { group }: { group?: JoiValidationGroup } = {},
+  { group }: { group?: JoiValidationGroup | undefined } = {},
 ): Joi.Schema {
   const protoChain: Array<typeof Object.prototype> = [];
 
   // Get all prototypes in the chain, resulting in an array with the prototype
   // that is closest to Object as the last element. For each step, check if an
   // alternative parent was specified via decorator; if so, use that parent instead.
-  let currentProto = type.prototype;
+  let currentProto = type.prototype as typeof Object.prototype;
   do {
     protoChain.push(currentProto);
 
-    const extendsMeta: Constructor | undefined = Reflect.getOwnMetadata(
-      EXTENDS_PROTO_KEY,
-      currentProto.constructor,
-    );
+    const extendsMeta = Reflect.getOwnMetadata(EXTENDS_PROTO_KEY, currentProto.constructor) as
+      Constructor | undefined;
     if (extendsMeta) {
-      currentProto = extendsMeta.prototype;
+      currentProto = extendsMeta.prototype as typeof Object.prototype;
     } else {
-      currentProto = Object.getPrototypeOf(currentProto);
+      currentProto = Object.getPrototypeOf(currentProto) as typeof Object.prototype;
     }
   } while (currentProto !== Object.prototype);
 
@@ -65,25 +62,21 @@ export function getTypeSchema(
   // the one closest to Object, so that parent property schemas get overridden
   // by child property schemas.
   // Schema options are also assigned in that order.  const props: string[] = [];
-  const schemas: { [key: string]: Joi.Schema } = {};
+  const schemas: Record<string, Joi.Schema> = {};
   const options: Joi.ValidationOptions = {};
-  for (const proto of reverse(protoChain)) {
+  for (const proto of protoChain.reverse()) {
     // Check for meta information on proto
-    const optionsMeta: ClassOptionsMetadata | undefined = Reflect.getOwnMetadata(
-      OPTIONS_PROTO_KEY,
-      proto.constructor,
-    );
-    const customizerMeta: ClassCustomizerMetadata | undefined = Reflect.getOwnMetadata(
-      CUSTOMIZER_PROTO_KEY,
-      proto.constructor,
-    );
+    const optionsMeta = Reflect.getOwnMetadata(OPTIONS_PROTO_KEY, proto.constructor) as
+      ClassOptionsMetadata | undefined;
+    const customizerMeta = Reflect.getOwnMetadata(CUSTOMIZER_PROTO_KEY, proto.constructor) as
+      ClassCustomizerMetadata | undefined;
 
     let protoOptions: Joi.ValidationOptions;
     // Decorator was used to specify options on this proto
     if (optionsMeta && group && optionsMeta.has(group)) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       protoOptions = optionsMeta.get(group)!;
-    } else if (optionsMeta && optionsMeta.has(DEFAULT)) {
+    } else if (optionsMeta?.has(DEFAULT)) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       protoOptions = optionsMeta.get(DEFAULT)!;
     } else {
@@ -96,16 +89,18 @@ export function getTypeSchema(
     if (customizerMeta && group && customizerMeta.has(group)) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       protoSchemaFn = customizerMeta.get(group)!;
-    } else if (customizerMeta && customizerMeta.has(DEFAULT)) {
+    } else if (customizerMeta?.has(DEFAULT)) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       protoSchemaFn = customizerMeta.get(DEFAULT)!;
     }
 
     // Check for property information on proto
     /* istanbul ignore next */
-    const protoProps: string[] = Reflect.getOwnMetadata(SCHEMA_PROTO_KEY, proto) || [];
+    const protoProps =
+      (Reflect.getOwnMetadata(SCHEMA_PROTO_KEY, proto) as string[] | undefined) ?? [];
     for (const prop of protoProps) {
-      const propMeta: PropertySchemaMetadata = Reflect.getOwnMetadata(SCHEMA_PROP_KEY, proto, prop);
+      const propMeta = Reflect.getOwnMetadata(SCHEMA_PROP_KEY, proto, prop) as
+        PropertySchemaMetadata | undefined;
 
       // Ignore property if not part of designated validation group
       let schemaOrType: Joi.Schema | Constructor | Constructor[];
@@ -114,7 +109,7 @@ export function getTypeSchema(
       if (propMeta && group && propMeta.has(group)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ({ schemaOrType, schemaFn, schemaArrayFn } = propMeta.get(group)!);
-      } else if (propMeta && propMeta.has(DEFAULT)) {
+      } else if (propMeta?.has(DEFAULT)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ({ schemaOrType, schemaFn, schemaArrayFn } = propMeta.get(DEFAULT)!);
       } else {
@@ -122,11 +117,11 @@ export function getTypeSchema(
       }
 
       if (Joi.isSchema(schemaOrType)) {
-        schemas[prop] = schemaOrType as Joi.Schema;
+        schemas[prop] = schemaOrType;
       } else if (typeof schemaOrType === 'function') {
-        schemas[prop] = getTypeSchema(schemaOrType as Constructor, {
+        schemas[prop] = getTypeSchema(schemaOrType, {
           group,
-        }) as Joi.Schema;
+        });
 
         if (schemaFn) {
           schemas[prop] = schemaFn(schemas[prop]);
@@ -134,9 +129,9 @@ export function getTypeSchema(
       } else {
         /* istanbul ignore else */ // else case prevented by type checking on decorator
         if (schemaOrType instanceof Array) {
-          let schema = getTypeSchema(schemaOrType[0], {
+          let schema = getTypeSchema(schemaOrType[0] as Constructor, {
             group,
-          }) as Joi.Schema;
+          });
 
           if (schemaFn) {
             schema = schemaFn(schema);

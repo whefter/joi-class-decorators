@@ -1,13 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "rootDir": "./src",
+    "types": [],
     "sourceMap": false,
     "declaration": true,
     "removeComments": true,
-    "target": "es2015"
+    "useUnknownInCatchVariables": true,
+    "noUnusedLocals": true
   },
-  "exclude": [
-    "test/**/*",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.spec.ts"]
 }
