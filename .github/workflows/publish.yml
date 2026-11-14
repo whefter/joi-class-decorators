@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     name: publish
     needs: test
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing (OIDC); provenance is generated automatically
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -26,5 +29,4 @@ jobs:
       - uses: JS-DevTools/npm-publish@0fd2f4369c5d6bcfcde6091a7c527d810b9b5c3f # v4.1.5
         with:
           package: dist/package.json
-          token: ${{ secrets.NPM_TOKEN }}
           ignore-scripts: true
